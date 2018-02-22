@@ -3,14 +3,16 @@ import { render } from "react-dom";
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-
-const styles = {
-  fontFamily: "sans-serif",
-  textAlign: "center"
-};
+import CardList from './CardList';
+import { robots } from './robots';
+import tachyons from 'tachyons';
 
 
-render(<App />, document.getElementById("root"));
+render(
+  <div>
+    <CardList robots={robots} />
+  </div>
+  , document.getElementById("root"));
 
 
 
