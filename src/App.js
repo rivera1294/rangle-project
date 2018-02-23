@@ -1,19 +1,36 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Card from './Card';
+import CardList from './CardList';
+import SearchBox from './SearchBox';
+import {robots} from './robots';
 
 
-const styles = {
-  fontFamily: "sans-serif",
-  textAlign: "center"
-};
 
 class App extends Component {
+  constructor() {
+    super()
+    this.state = {
+      searchTerm: '',
+      robots: robots
+    }
+  }
+
+  onSearchChange = (evt) => {
+    console.log(evt.target.value);
+    this.setState({searchTerm: evt.target.value})
+  }
+
   render() {
+    console.log(robots);
+    const  { searchTerm, robots } = this.state;
+    const filteredRobots = robots.filter(robot =>
+        robot.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
     return (
-      <div style={styles}>
-        <Card id="1" name="Jane Doe" email="jane.doe@gmail.com" />
+      <div className='tc'>
+        <h1>RoboDex</h1>
+        <SearchBox onSearchChange={this.onSearchChange} />
+        <CardList robots={filteredRobots} />
       </div>
     );
   }

@@ -9,11 +9,7 @@ import { robots } from './robots';
 import tachyons from 'tachyons';
 
 
-render(
-  <div>
-  <SearchBox/>
-    <CardList robots={robots} />
-  </div>
+render(<App robots={robots}/>
   , document.getElementById("root"));
 
 
