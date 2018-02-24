@@ -11,7 +11,8 @@ class App extends Component {
     super()
     this.state = {
       searchTerm: '',
-      robots: []
+      robots: [],
+      isPending: true
     }
   }
   componentDidMount() {
@@ -19,7 +20,8 @@ class App extends Component {
       .then(response => response.json())
       .then(data => {
         this.setState({
-          robots: data
+          robots: data,
+          isPending: false
         })
       })
   }
@@ -31,7 +33,7 @@ class App extends Component {
 
   render() {
     console.log(robots);
-    const  { searchTerm, robots } = this.state;
+    const  { searchTerm, robots, isPending } = this.state;
     const filteredRobots = robots.filter(robot =>
         robot.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -39,7 +41,7 @@ class App extends Component {
       <div className='tc'>
         <h1>RoboDex</h1>
         <SearchBox onSearchChange={this.onSearchChange} />
-        <CardList robots={filteredRobots} />
+        { isPending ? <h2>Loading...</h2> : <CardList robots={filteredRobots} />}
       </div>
     );
   }
