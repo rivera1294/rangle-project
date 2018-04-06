@@ -2,43 +2,43 @@ import React, { Component } from "react";
 import "./App.css";
 import CardList from "../Components/CardList";
 import SearchBox from "../Components/SearchBox";
-import { apiCall } from "../api/api";
 import Scroll from "../Components/Scroll";
 import { connect } from 'react-redux';
-import { setSearchTerm } from '../actions';
+import { setSearchTerm, requestRobots } from '../actions';
 
 const mapStateToProps = state => {
   return {
-    searchTerm: state.searchTerm
+    searchTerm: state.search.searchTerm,
+    robots: state.robots.robots,
+    isPending: state.robots.isPending,
+    error: state.robots.error,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSearchChange: event => dispatch(setSearchTerm(event.target.value))
+    onSearchChange: event => dispatch(setSearchTerm(event.target.value)),
+    onRequestRobots: () => dispatch(requestRobots),
   }
 }
 class App extends Component {
-  constructor() {
-    super();
-    this.state = { robots: [], isPending: true };
-  }
+
   componentDidMount() {
-    apiCall("https://jsonplaceholder.typicode.com/users").then(
-      response => this.setState({ robots: response, isPending: false })
-    );
+    this.props.onRequestRobots();
   }
 
   render() {
-    const { robots, isPending } = this.state;
-    const { onSearchChange, searchTerm } = this.props;
+    const { onSearchChange, searchTerm, robots, isPending, error } = this.props;
     const filteredRobots = robots.filter(
       robot => robot.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     return (
       <div className="tc">
         <h1>RoboDex</h1>
-        <SearchBox onSearchChange={this.props.onSearchChange} />
+        <SearchBox onSearchChange={onSearchChange} />
+        {
+          error ? <h2>Error: {error}</h2> : null
+        }
         <Scroll>
           {
             isPending
